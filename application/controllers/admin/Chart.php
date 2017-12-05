@@ -12,7 +12,7 @@ Class Chart extends Admin_Controller {
     }
 
     function index($id = null) {
-
+        
         $this->data['users'] = $this->User_m->get_users();
         $this->data['titles'] = $this->Job_title_m->get_job_titles();
         $this->data['competency_labels'] = json_encode($this->Competency_m->getLabels());
