@@ -106,10 +106,12 @@ Class Dashboard extends Admin_Controller {
         redirect(site_url('admin/dashboard'));
     }
 
-    public function order_competency($id = null) {
-
+    public function order_competency($user_id = null, $job_id = null) {
+//        echo $user_id . '/' . $job_id;
+//        exit();
+        $this->data['jobCompArray'] = $this->Skills_m->getJobTitleComp($job_id);
         $this->data['skills'] = $this->Skills_m->skillArray();
-        $this->data['selectedArray'] = $this->User_m->getUserCompetencies($id);
+        $this->data['selectedArray'] = $this->User_m->getUserCompetencies($user_id);
         $this->data['compArray'] = $this->Competency_m->getParentChild();
         $this->load->view('admin/user/order_competency', $this->data);
     }

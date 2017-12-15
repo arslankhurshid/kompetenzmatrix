@@ -50,9 +50,11 @@ Class Competency extends Admin_Controller {
         $rules = $this->Competency_m->rules;
         $this->form_validation->set_rules($rules);
         if ($this->form_validation->run() == TRUE) {
+            $this->validateCompetencyName($this->input->post('name'));
+            exit();
             $data = $this->Competency_m->array_from_post(array('name', 'parent_id'));
-            $this->Competency_m->save($data, $id);
-            redirect(site_url('admin/competency'));
+//            $this->Competency_m->save($data, $id);
+//            redirect(site_url('admin/competency'));
         } else {
             $this->data['validation_error'] = validation_errors();
         }
@@ -80,6 +82,19 @@ Class Competency extends Admin_Controller {
 
         $this->data['competencies'] = $this->Competency_m->get_nested();
         $this->load->view('admin/competency/order_ajax', $this->data);
+    }
+    
+    public function validateCompetencyName($string)
+    {
+        $competency = $this->Competency_m->getDuplicateName($string);
+        
+        echo "<pre>";
+        print_r(json_encode($competency));
+        echo "</pre>";
+        exit();
+        
+      
+        
     }
 
 }

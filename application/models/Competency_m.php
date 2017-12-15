@@ -132,19 +132,32 @@ Class Competency_m extends My_Model {
         if (count($competencies)) {
             foreach ($competencies as $competency) {
                 $array[$competency->ID] = $competency->NAME;
-                if ($id != null) {
-                    $parents = $this->get_with_parent();
-                    $parentID = array();
-                    foreach ($parents as $parent) {
-                        $parentID[$parent->PARENT_ID] = $parent->PARENT_NAME;
-                        if ($parent->PARENT_ID == $id) {
-                            unset($array[$competency->ID]);
-                        }
-                    }
-                }
+//                if ($id != null) {
+//                    $parents = $this->get_with_parent();
+//                    $parentID = array();
+//                    foreach ($parents as $parent) {
+//                        $parentID[$parent->PARENT_ID] = $parent->PARENT_NAME;
+//                        if ($parent->PARENT_ID == $id) {
+//                            unset($array[$competency->ID]);
+//                        }
+//                    }
+//                }
             }
         }
         return $array;
+    }
+
+    public function getDuplicateName($name) {
+
+        $lowercase = strtolower($name);
+        $uppercase = strtoupper($name);
+        $ucfirst = ucfirst(strtolower($name));
+      
+        $query = $this->db->query("SELECT name,parent_id FROM $this->_table_name WHERE name LIKE '$lowercase%' OR name LIKE '$uppercase%' OR name LIKE '$ucfirst%'");
+      
+        $result = $query->result_array();
+      
+        return $result;
     }
 
 }

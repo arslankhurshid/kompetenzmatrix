@@ -1,13 +1,13 @@
 <h3><?php echo empty($user->ID) ? 'Mitarbeiter Stammdaten' : 'Bearbeiten:' . '&nbsp' . $user->FNAME ?></h3>
-<?php if (isset($validation_error) && $validation_error !==''): ?>
+<?php if (isset($validation_error) && $validation_error !== ''): ?>
     <div class="alert alert-danger" id="errordiv">
         <?php echo validation_errors() ?>
     </div>
 <?php endif; ?>
 <?php echo form_open(); ?>
-<?php 
+<?php
 //echo "<pre>";
-//print_r($compArray);
+//print_r($user);
 //echo "</pre>";
 ?>
 <table class="table">
@@ -21,7 +21,7 @@
     </tr>
     <tr>
         <td>Stellenbezeichnung:</td>
-        <td><?php echo form_dropdown('job_title_id', $job_title, $this->input->post('job_title_id') ? $this->input->post('job_title_id') : $user->JOB_TITLE_ID, 'class="btn btn-default dropdown-toggle btn-select2" id="my_id"'); ?></td>
+        <td><?php echo form_dropdown('job_title_id', $job_title, $this->input->post('job_title_id') ? $this->input->post('job_title_id') : $user->JOB_TITLE_ID, 'class="btn btn-default dropdown-toggle btn-select2" id="job_id" onchange="getCompetency()"'); ?></td>
     </tr>
     <tr>
         <td>Geburtsdatum:</td>
@@ -55,24 +55,24 @@
 
     });
 
-    var drop_down = document.getElementById("my_id");
-    $(function () {
+    var jobID = document.getElementById("job_id");
+    function getCompetency() {
 
-        $.post('<?php echo site_url('admin/dashboard/order_competency/'), isset($user->ID) ? $user->ID :''; ?>', {dataType: "json"}, function (data) {
-            console.info(data);
+        $.post('<?php echo site_url('admin/dashboard/order_competency/'), isset($user->ID) ? $user->ID .'/'  : '0/'; ?>' + jobID.value, {dataType: "json"}, function (data) {
             $("#competency").html('');
             $("#competency").html(data);
-//            var $el = $("#my_id2");
-//            $el.empty(); // remove old options
-//            $.each(JSON.parse(data), function (key, value) {
-//
-//                $('#my_id2').append($('<option>').text(value).attr('value', key));
-//
-//                console.log(key + ":" + value)
-//            })
+
         });
-    })
-            ;
+    }
+
+    $(function () {
+        $.post('<?php echo site_url('admin/dashboard/order_competency/'), isset($user->ID) ? $user->ID .'/' : ''; ?>' + jobID.value, {dataType: "json"}, function (data) {
+            $("#competency").html('');
+            $("#competency").html(data);
+
+        });
+    });
+
 
 
 </script>

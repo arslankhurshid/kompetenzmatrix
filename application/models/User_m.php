@@ -42,10 +42,14 @@ Class User_m extends My_Model {
                                                         WHERE $this->_table_name.id = '" . $id . "';
                                                         ");
         $results = $query->result_array();
+       
         $array = array();
         foreach ($results as $res) {
             $array[$res['COMPETENCY_ID']] = $res['SKILL_VALUE'];
         }
+         echo "<pre>";
+        print_r($array);
+        echo "</pre>";
         return $array;
     }
 
